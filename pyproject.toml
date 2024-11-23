@@ -22,7 +22,8 @@ dependencies = [
     "einops",
     "open-clip-torch",
     "tqdm",
-    "huggingface_hub"
+    "huggingface_hub",
+    "loguru",
 ]
 
 [tool.setuptools]

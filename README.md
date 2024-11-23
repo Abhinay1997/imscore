@@ -11,26 +11,25 @@ pip install imscore
 ## Usage
 
 ```python
-from imscore.aesthetic.model import ShadowAesthetic, CLIPAestheticScorer, SiglipAestheticScorer, Dinov2AestheticScorer
+from imscore.aesthetic.model import ShadowAesthetic, CLIPAestheticScorer, SiglipAestheticScorer, Dinov2AestheticScorer, LAIONAestheticScorer
 from imscore.hps.model import HPSv2
 from imscore.mps.model import MPS
 from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScorer
-from imscore.pickscore.model import PickScore
+from imscore.pickscore.model import PickScorer
 
 import torch
 import numpy as np
 from PIL import Image
 from einops import rearrange
 
-
 model = ShadowAesthetic() # https://huggingface.co/shadowlilac/aesthetic-shadow-v2
-model = PickScore() # https://github.com/yuvalkirstain/PickScore
+model = PickScorer() # https://github.com/yuvalkirstain/PickScore
 model = MPS.from_pretrained("RE-N-Y/mpsv1") # https://github.com/Kwai-Kolors/MPS
 model = HPSv2.from_pretrained("RE-N-Y/hpsv21") # https://github.com/tgxs002/HPSv2
 model = LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # https://github.com/christophschuhmann/improved-aesthetic-predictor
 
 # pixel only aesthetic scorers trained on imreward dataset
-model = Dinov2AestheticScorer.from_pretrained("RE-N-Y/imreward-overall_rating-dinov2") # 
+model = Dinov2AestheticScorer.from_pretrained("RE-N-Y/imreward-overall_rating-dinov2")
 model = Dinov2AestheticScorer.from_pretrained("RE-N-Y/imreward-fidelity_rating-dinov2")
 model = CLIPAestheticScorer.from_pretrained("RE-N-Y/ava-rating-clip-sampled-True")
 
