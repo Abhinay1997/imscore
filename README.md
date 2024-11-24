@@ -134,7 +134,7 @@ CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
 | ImageReward (aesthetic rating) | imreward-fidelity_rating-siglip | 0.857 |
 | ImageReward (aesthetic rating) | imreward-fidelity_rating-clip | 0.859 |
 | ImageReward (aesthetic rating) | imreward-fidelity_rating-dinov2 | 0.845 |
-| AVA () | ava-rating-clip-sampled-True | 0.228 |
+| AVA | ava-rating-clip-sampled-True | 0.228 |
 | AVA | ava-rating-clip-sampled-False | 0.236 |
 | AVA | ava-rating-siglip-sampled-True | 0.292 |
 | AVA | ava-rating-siglip-sampled-False | 0.276 |
@@ -146,10 +146,15 @@ CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
 | PickAPicv2 (test + no ties) | pickscore-clip | 67.46% |
 | ??? | ShadowAesthetic v2 | ??? |
 
-Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 asks model/user to pick the better image given a prompt. Shadow Aesthetic v2 is an anime aesthetic scorer with ViT backbone, training recipe and objective is not disclosed.
+Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 asks model/user to pick the better image given a prompt. Shadow Aesthetic v2 is an anime aesthetic scorer with ViT backbone, training recipe and objective is not disclosed. For AVA, there's no official test set, so I've created my own split. The performance comparison between LAION aesthetic scorer and other scorers is not an apple-to-apple comparison.
 
 
 ## Why did I make this?
 
 1. To save myself headaches.
 2. To provide a common interface for dataset filtering, posttraining, and image model benchmarking.
+
+## TODOs
+
+- [ ] Benchmark scorers across ImageReward, PickAPicv2, MPS, and HPS datasets.
+- [ ] Add AIMv2 backbone scorers.
