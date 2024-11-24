@@ -11,7 +11,7 @@ class ShadowAesthetic(nn.Module):
     def __init__(self):
         super().__init__()
         self.model = ViTForImageClassification.from_pretrained("shadowlilac/aesthetic-shadow-v2")
-        self.resize = torchvision.transforms.Resize(1024, interpolation=2)
+        self.resize = torchvision.transforms.Resize((1024, 1024), interpolation=2)
         self.normalize = torchvision.transforms.Normalize(mean=[0.65463551, 0.60715182, 0.61108185], std=[0.32903292, 0.32726001, 0.31909652])
 
     def forward(self, pixels, prompts=None):
@@ -196,7 +196,7 @@ class LAIONAestheticScorer(
         self.clip = CLIPVisionModelWithProjection.from_pretrained("openai/clip-vit-large-patch14")
         self.mlp = MLP()
 
-        self.resize = torchvision.transforms.Resize(224)
+        self.resize = torchvision.transforms.Resize(224, interpolation=3)
         self.crop = torchvision.transforms.CenterCrop(224)
         self.normalize = torchvision.transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
 

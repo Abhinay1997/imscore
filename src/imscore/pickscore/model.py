@@ -11,7 +11,8 @@ class PickScorer(nn.Module):
         super().__init__()
         self.processor = AutoProcessor.from_pretrained("laion/CLIP-ViT-H-14-laion2B-s32B-b79K")
         self.model = CLIPModel.from_pretrained(model)
-        self.resize = torchvision.transforms.Resize(224) # Resize to 224x224        
+        self.resize = torchvision.transforms.Resize(224, interpolation=3) # Resize to 224x224      
+        self.crop = torchvision.transforms.CenterCrop(224) # Center crop to 224x224  
         self.normalize = torchvision.transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
 
     def _process(self, pixels):

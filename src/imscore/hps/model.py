@@ -6,6 +6,7 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 import torchvision
+from torchvision.transforms import InterpolationMode
 from open_clip import create_model_and_transforms, get_tokenizer
 from huggingface_hub import PyTorchModelHubMixin
 from pathlib import Path
@@ -29,7 +30,7 @@ class HPSv2(
         self.tokenizer = get_tokenizer("ViT-H-14")
         self.model.eval()
 
-        self.resize = torchvision.transforms.Resize(224)
+        self.resize = torchvision.transforms.Resize(224, interpolation=3)
         self.crop = torchvision.transforms.CenterCrop(224)
         self.normalize = torchvision.transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
 

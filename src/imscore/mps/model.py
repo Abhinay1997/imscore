@@ -144,7 +144,8 @@ class MPS(
         mps.eval()
 
         self.mps = mps
-        self.resize = torchvision.transforms.Resize(224)
+        self.resize = torchvision.transforms.Resize(224, interpolation=3)
+        self.crop = torchvision.transforms.CenterCrop(224)
         self.normalize = torchvision.transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
 
 
@@ -153,6 +154,7 @@ class MPS(
         # assumes x is between 0 and 1
         dtype = x.dtype
         x = self.resize(x)
+        x = self.crop(x)
         x = self.normalize(x)
         x = x.to(dtype=dtype)
 
