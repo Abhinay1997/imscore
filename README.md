@@ -102,7 +102,7 @@ SiglipAestheticScorer.from_pretrained("RE-N-Y/ava-rating-siglip-sampled-False")
 Dinov2AestheticScorer.from_pretrained("RE-N-Y/ava-rating-dinov2-sampled-True")
 Dinov2AestheticScorer.from_pretrained("RE-N-Y/ava-rating-dinov2-sampled-False")
 
-
+# Common aesthetic scorers
 LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # LAION aesthetic scorer
 ShadowAesthetic() # ShadowAesthetic aesthetic scorer for anime images
 ```
@@ -119,8 +119,8 @@ MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
 PickScorer() # PickScore preference scorer
 
 # multimodal scorers trained on PickAPicv2 dataset
-SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip") # SoTA on pickapicv2 test set
-CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip") # Good model for post training
+SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
+CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
 ```
 
 
@@ -142,8 +142,8 @@ CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip") # Good model for p
 | AVA | ava-rating-dinov2-sampled-False | 0.265 |
 | LAION | laion-aesthetic | 0.321 |
 | PickAPicv2 (test + no ties) | pickscore | 69.67% |
-| PickAPicv2 (test + no ties) | pickscore-siglip | x |
-| PickAPicv2 (test + no ties) | pickscore-clip | x |
+| PickAPicv2 (test + no ties) | pickscore-siglip | 67.68% |
+| PickAPicv2 (test + no ties) | pickscore-clip | 67.46% |
 | ??? | ShadowAesthetic v2 | ??? |
 
 Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 asks model/user to pick the better image given a prompt. Shadow Aesthetic v2 is an anime aesthetic scorer with ViT backbone, training recipe and objective is not disclosed.
