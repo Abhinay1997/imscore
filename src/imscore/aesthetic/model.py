@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision
+from torchvision.transforms.functional import InterpolationMode
 from transformers import AutoModel, AutoProcessor, AutoImageProcessor
 from transformers import SiglipVisionModel, Dinov2Model, CLIPVisionModelWithProjection, ViTForImageClassification
 from huggingface_hub import PyTorchModelHubMixin
@@ -195,8 +196,7 @@ class LAIONAestheticScorer(
         
         self.clip = CLIPVisionModelWithProjection.from_pretrained("openai/clip-vit-large-patch14")
         self.mlp = MLP()
-
-        self.resize = torchvision.transforms.Resize(224, interpolation=3)
+        self.resize = torchvision.transforms.Resize(224, interpolation=InterpolationMode.BICUBIC)
         self.crop = torchvision.transforms.CenterCrop(224)
         self.normalize = torchvision.transforms.Normalize(mean=[0.48145466, 0.4578275, 0.40821073], std=[0.26862954, 0.26130258, 0.27577711])
 

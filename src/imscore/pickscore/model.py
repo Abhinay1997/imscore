@@ -18,6 +18,7 @@ class PickScorer(nn.Module):
     def _process(self, pixels):
         dtype = pixels.dtype
         pixels = self.resize(pixels)
+        pixels = self.crop(pixels)
         pixels = self.normalize(pixels)
         pixels = pixels.to(dtype=dtype)
 

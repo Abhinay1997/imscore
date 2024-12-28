@@ -141,7 +141,6 @@ class MPS(
         mps.model.text_model.eos_token_id = 2
         mps.model.text_model.requires_grad_(False)
         mps.model.vision_model.requires_grad_(True)
-        mps.eval()
 
         self.mps = mps
         self.resize = torchvision.transforms.Resize(224, interpolation=3)
@@ -175,7 +174,6 @@ class MPS(
 
     def score(self, pixels, prompts:list[str]):
         b, c, h, w = pixels.shape
-
         pixels = self._process(pixels)
         texts = self._tokenize(prompts).to(pixels.device)
         conds = self._tokenize(self.condition).to(pixels.device)
@@ -183,6 +181,7 @@ class MPS(
         tfeats, ifeats = self.mps(texts, pixels, conds.repeat(b, 1))
         ifeats = ifeats / ifeats.norm(dim=-1, keepdim=True)
         tfeats = tfeats / tfeats.norm(dim=-1, keepdim=True)
+
         scores = self.mps.logit_scale.exp() * torch.diagonal(torch.einsum('bd,cd->bc', tfeats, ifeats))
 
         return scores

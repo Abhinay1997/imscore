@@ -149,6 +149,19 @@ CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
 Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 asks model/user to pick the better image given a prompt. Shadow Aesthetic v2 is an anime aesthetic scorer with ViT backbone, training recipe and objective is not disclosed. For AVA, there's no official test set, so I've created my own split. The performance comparison between LAION aesthetic scorer and other scorers is not an apple-to-apple comparison.
 
 
+## Differenes between original and ported versions
+
+| Model     | Mean Error  | Mean Error % | Std Error   | Std Error % |
+|-----------|------------|--------------|-------------|-------------|
+| pickscore | 0.03527937 | 0.16369674   | 0.05973462 | 0.27823631  |
+| mps       | 0.12074625 | 1.32836155   | 0.09309421 | 2.42399984  |
+| hps       | 0.00102483 | 0.36351435   | 0.00129612 | 0.44354813  |
+| laion     | 0.02031445 | 0.34705477   | 0.01730994 | 0.29722394  |
+
+imscore library ports popular scorers such as PickScore, MPS, HPSv2, etc. In order to ensure that `.score` function is (1) fully differentiable and (2) takes pixels of range [0, 1], the image processing pipeline had to be modified. The above table reports the mean and standard error between the original and ported versions. 
+
+Most ported models have a mean absolute error less than < 0.1% w.r.t original output. These statistics were computed on PickAPicv2 test unique set images.
+
 ## Why did I make this?
 
 1. To save myself headaches.
@@ -157,4 +170,6 @@ Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 as
 ## TODOs
 
 - [ ] Benchmark scorers across ImageReward, PickAPicv2, MPS, and HPS datasets.
+- [x] Add discrepancy analysis between original and ported scorers.
+- [ ] Add ImageReward scorers.
 - [ ] Add AIMv2 backbone scorers.
