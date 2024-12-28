@@ -1,7 +1,7 @@
 from imscore.aesthetic.model import ShadowAesthetic, CLIPAestheticScorer, SiglipAestheticScorer, Dinov2AestheticScorer, LAIONAestheticScorer
 from imscore.hps.model import HPSv2
 from imscore.mps.model import MPS
-from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScorer
+from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScorer, CLIPScore
 from imscore.pickscore.model import PickScorer
 
 import torch
@@ -33,6 +33,8 @@ def factory(name:str):
             return CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
         case "PickScorer":
             return PickScorer()
+        case "CLIPScore":
+            return CLIPScore("openai/clip-vit-large-patch14")
         case _:
             raise ValueError(f"model {name} not found")
         
@@ -40,12 +42,13 @@ def factory(name:str):
 def testrun(name:str):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = factory(name)
-    model.to(device=device, dtype=torch.bfloat16)
+    model.eval()
+    model.to(device=device)
 
     prompts = "a photo of a cat"
 
     good, bad = Image.open("cat.png"), Image.open("badcat.png")
-    good, bad = good.resize((512, 512)), bad.resize((512, 512))
+    good, bad = good.resize((512,512)), bad.resize((512,512))
     good, bad = np.array(good), np.array(bad)
     good = rearrange(torch.tensor(good), "h w c -> 1 c h w") / 255.0
     bad = rearrange(torch.tensor(bad), "h w c -> 1 c h w") / 255.0
@@ -55,22 +58,27 @@ def testrun(name:str):
     # score == logits
 
     pixels = torch.cat([good, bad])
-    pixels = pixels.to(device=device, dtype=torch.bfloat16)
+    pixels = pixels.to(device=device)
     prompts = [prompts] * 2
 
     score = model.score(pixels, prompts) # full differentiable reward
+    assert score.grad_fn is not None
 
     return score
 
 
 if __name__ == "__main__":
     names = [
-        "ShadowAesthetic", "CLIPAestheticScorer", 
-        "SiglipAestheticScorer", "Dinov2AestheticScorer", 
+        "ShadowAesthetic", 
+        "CLIPAestheticScorer", 
+        "SiglipAestheticScorer", 
+        "Dinov2AestheticScorer", 
         "LAIONAestheticScorer", 
         "HPSv2", "MPS",
-        "SiglipPreferenceScorer", "CLIPPreferenceScorer", 
-        "PickScorer"
+        "SiglipPreferenceScorer",
+        "CLIPPreferenceScorer", 
+        "PickScorer",
+        "CLIPScore"
     ]
 
     for name in names:
