@@ -160,7 +160,7 @@ Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 as
 
 imscore library ports popular scorers such as PickScore, MPS, HPSv2, etc. In order to ensure that `.score` function is (1) fully differentiable and (2) takes pixels of range [0, 1], the image processing pipeline had to be modified. The above table reports the mean and standard error between the original and ported versions. 
 
-Most ported models have a mean absolute error less than < 0.1% w.r.t original output. These statistics were computed on PickAPicv2 test unique set images.
+Most ported models have a mean absolute error less than < 1% w.r.t original output. These statistics were computed on PickAPicv2 test unique set images.
 
 ## Why did I make this?
 
