@@ -3,3 +3,6 @@ __pycache__
 *.pyo
 *.egg-info
 dist
+# everything under test/ except test.py
+test/*
+!test/test.py

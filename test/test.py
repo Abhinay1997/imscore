@@ -3,6 +3,7 @@ from imscore.hps.model import HPSv2
 from imscore.mps.model import MPS
 from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScorer, CLIPScore
 from imscore.pickscore.model import PickScorer
+from imscore.imreward.model import ImageReward
 
 import torch
 import numpy as np
@@ -35,6 +36,8 @@ def factory(name:str):
             return PickScorer()
         case "CLIPScore":
             return CLIPScore("openai/clip-vit-large-patch14")
+        case "ImageReward":
+            return ImageReward()
         case _:
             raise ValueError(f"model {name} not found")
         
@@ -78,7 +81,8 @@ if __name__ == "__main__":
         "SiglipPreferenceScorer",
         "CLIPPreferenceScorer", 
         "PickScorer",
-        "CLIPScore"
+        "CLIPScore",
+        "ImageReward"
     ]
 
     for name in names:
