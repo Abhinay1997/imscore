@@ -25,8 +25,9 @@ pip install imscore
 from imscore.aesthetic.model import ShadowAesthetic, LAIONAestheticScorer
 from imscore.hps.model import HPSv2
 from imscore.mps.model import MPS
-from imscore.preference.model import SiglipPreferenceScorer
+from imscore.preference.model import SiglipPreferenceScorer, CLIPScore
 from imscore.pickscore.model import PickScorer
+from imscore.imreward.model import ImageReward
 
 import torch
 import numpy as np
@@ -35,9 +36,11 @@ from einops import rearrange
 
 # popular aesthetic/preference scorers
 model = ShadowAesthetic() # ShadowAesthetic aesthetic scorer (my favorite)
-model = PickScorer() # PickScore preference scorer
+model = CLIPScore("openai/clip-vit-large-patch14") # CLIPScore
+model = PickScorer("yuvalkirstain/PickScore_v1") # PickScore preference scorer
 model = MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
 model = HPSv2.from_pretrained("RE-N-Y/hpsv21") # HPSv2.1 preference scorer
+model = ImageReward.from_pretrained("RE-N-Y/ImageReward") # ImageReward aesthetic scorer
 model = LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # LAION aesthetic scorer
 
 # multimodal (pixels + text) preference scorers trained on PickaPicv2 dataset 
@@ -111,42 +114,19 @@ ShadowAesthetic() # ShadowAesthetic aesthetic scorer for anime images
 ```python
 from imscore.hps.model import HPSv2
 from imscore.mps.model import MPS
+from imscore.imreward.model import ImageReward
 from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScorer
 from imscore.pickscore.model import PickScorer
 
 HPSv2.from_pretrained("RE-N-Y/hpsv21") # HPSv2.1 preference scorer
 MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
-PickScorer() # PickScore preference scorer
+PickScorer("yuvalkirstain/PickScore_v1") # PickScore preference scorer
+ImageReward.from_pretrained("RE-N-Y/ImageReward") # ImageReward preference scorer
 
 # multimodal scorers trained on PickAPicv2 dataset
 SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
 CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
 ```
-
-
-## Benchmarks
-
-| Dataset | Model | Performance |
-| --- | --- | --- |
-| ImageReward (overall rating) | imreward-overall_rating-siglip | 1.147 |
-| ImageReward (overall rating) | imreward-overall_rating-clip | 1.213 |
-| ImageReward (overall rating) | imreward-overall_rating-dinov2 | 1.111 |
-| ImageReward (aesthetic rating) | imreward-fidelity_rating-siglip | 0.857 |
-| ImageReward (aesthetic rating) | imreward-fidelity_rating-clip | 0.859 |
-| ImageReward (aesthetic rating) | imreward-fidelity_rating-dinov2 | 0.845 |
-| AVA | ava-rating-clip-sampled-True | 0.228 |
-| AVA | ava-rating-clip-sampled-False | 0.236 |
-| AVA | ava-rating-siglip-sampled-True | 0.292 |
-| AVA | ava-rating-siglip-sampled-False | 0.276 |
-| AVA | ava-rating-dinov2-sampled-True | 0.264 |
-| AVA | ava-rating-dinov2-sampled-False | 0.265 |
-| LAION | laion-aesthetic | 0.321 |
-| PickAPicv2 (test + no ties) | pickscore | 69.67% |
-| PickAPicv2 (test + no ties) | pickscore-siglip | 67.68% |
-| PickAPicv2 (test + no ties) | pickscore-clip | 67.46% |
-| ??? | ShadowAesthetic v2 | ??? |
-
-Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 asks model/user to pick the better image given a prompt. Shadow Aesthetic v2 is an anime aesthetic scorer with ViT backbone, training recipe and objective is not disclosed. For AVA, there's no official test set, so I've created my own split. The performance comparison between LAION aesthetic scorer and other scorers is not an apple-to-apple comparison.
 
 
 ## Differenes between original and ported versions
@@ -159,7 +139,7 @@ Note : Imreward uses 1-7 likert scale, AVA uses 1-10 likert scale, PickAPicv2 as
 | laion | 0.0202606 | 0.3461% |
 | imreward | 0.0135808 | 0.7608% |
 
-imscore library ports popular scorers such as PickScore, MPS, HPSv2, etc. In order to ensure that `.score` function is (1) fully differentiable and (2) takes pixels of range [0, 1], the image processing pipeline had to be modified. The above table reports the mean and standard error between the original and ported versions. 
+`imscore` library ports popular scorers such as PickScore, MPS, HPSv2, etc. In order to ensure that `.score` function is (1) fully differentiable and (2) takes pixels of range [0, 1], the image processing pipeline had to be modified. The above table reports the mean and standard error between the original and ported versions. 
 
 Most ported models have a mean absolute error less than < 1% w.r.t original output. These statistics were computed on PickAPicv2 test unique set images.
 
@@ -170,7 +150,7 @@ Most ported models have a mean absolute error less than < 1% w.r.t original outp
 
 ## TODOs
 
-- [ ] Benchmark scorers across ImageReward, PickAPicv2, MPS, and HPS datasets.
+- [x] Benchmark scorers across ImageReward, PickAPicv2, MPS, and HPS datasets.
 - [x] Add discrepancy analysis between original and ported scorers.
-- [ ] Add ImageReward scorers.
+- [x] Add ImageReward scorers.
 - [ ] Add AIMv2 backbone scorers.

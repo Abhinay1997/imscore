@@ -33,11 +33,11 @@ def factory(name:str):
         case "CLIPPreferenceScorer":
             return CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
         case "PickScorer":
-            return PickScorer()
+            return PickScorer("yuvalkirstain/PickScore_v1")
         case "CLIPScore":
             return CLIPScore("openai/clip-vit-large-patch14")
         case "ImageReward":
-            return ImageReward()
+            return ImageReward.from_pretrained("RE-N-Y/ImageReward")
         case _:
             raise ValueError(f"model {name} not found")
         
