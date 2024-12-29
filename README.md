@@ -128,6 +128,18 @@ SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
 CLIPPreferenceScorer.from_pretrained("RE-N-Y/pickscore-clip")
 ```
 
+## Benchmark on Preference datasets
+
+| Model                           |  HPD v2 Accuracy      | ImageReward Accuracy       |   Pickapicv2 Accuracy        |       Average     |
+|:--------------------------------|----------------------:|---------------------------:|-----------------------------:|------------------:|
+| pickscore                       |              0.792157 |                   0.667448 |                     0.801887 |          0.753831 |
+| hpsv21                          |              0.833464 |                   0.674793 |                     0.693396 |          0.733884 |
+| mpsv1                           |              0.838562 |                   0.677762 |                     0.650943 |          0.722423 |
+| imreward                        |              0.740131 |                   0.657915 |                     0.608491 |          0.668846 |
+| laion-aesthetic                 |              0.736013 |                   0.566807 |                     0.551887 |          0.618236 |
+| clipscore                       |              0.626078 |                   0.571652 |                     0.606132 |          0.601287 |
+
+For full benchmark results and methodology, please refer to [bench.md](bench.md).
 
 ## Differenes between original and ported versions
 
@@ -154,3 +166,5 @@ Most ported models have a mean absolute error less than < 1% w.r.t original outp
 - [x] Add discrepancy analysis between original and ported scorers.
 - [x] Add ImageReward scorers.
 - [ ] Add AIMv2 backbone scorers.
+- [ ] Add benchmarking code on HPD v2, ImageReward, and PickAPicv2 datasets.
+- [ ] 
