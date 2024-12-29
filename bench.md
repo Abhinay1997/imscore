@@ -12,12 +12,12 @@
 | imreward-overall_rating-dinov2*  |              0.701765 |                   0.623222 |                     0.568396 |          0.631128 |
 | ava-rating-siglip-sampled-True*  |              0.742092 |                   0.573996 |                     0.566038 |          0.627375 |
 | imreward-overall_rating-clip*   |              0.720784 |                   0.601031 |                     0.558962 |          0.626926 |
-| laion-aesthetic              *  |              0.736013 |                   0.566807 |                     0.551887 |          0.618236 |
+| laion-aesthetic*  |              0.736013 |                   0.566807 |                     0.551887 |          0.618236 |
 | pickscore-clip                  |              0.594641 |                   0.586185 |                     0.665094 |          0.615307 |
 | imreward-fidelity_rating-dinov2* |              0.66098  |                   0.60572  |                     0.549528 |          0.605409 |
 | imreward-fidelity_rating-clip*  |              0.662876 |                   0.614158 |                     0.535377 |          0.604137 |
 | clipscore                       |              0.626078 |                   0.571652 |                     0.606132 |          0.601287 |
-| ava-rating-clip-sampled-True *  |              0.708301 |                   0.540241 |                     0.554245 |          0.600929 |
+| ava-rating-clip-sampled-True*  |              0.708301 |                   0.540241 |                     0.554245 |          0.600929 |
 | ava-rating-dinov2-sampled-True* |              0.661765 |                   0.55493  |                     0.558962 |          0.591886 |
 
 (*): pixel only scorers
