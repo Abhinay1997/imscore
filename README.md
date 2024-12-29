@@ -167,4 +167,4 @@ Most ported models have a mean absolute error less than < 1% w.r.t original outp
 - [x] Add ImageReward scorers.
 - [ ] Add AIMv2 backbone scorers.
 - [ ] Add benchmarking code on HPD v2, ImageReward, and PickAPicv2 datasets.
-- [ ] 
+- [ ] Maybe add VQAScore as well.
