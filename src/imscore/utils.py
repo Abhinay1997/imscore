@@ -6,7 +6,7 @@ from transformers import AutoImageProcessor
 
 def get_size(size):
     if isinstance(size, int):
-        return size
+        return (size, size)
     elif "height" in size and "width" in size:
         return (size["height"], size["width"])
     elif "shortest_edge" in size:

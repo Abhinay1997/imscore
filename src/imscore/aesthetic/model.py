@@ -11,7 +11,7 @@ from ..utils import get_image_transform
 class ShadowAesthetic(nn.Module):
     def __init__(self):
         super().__init__()
-        self.model = ViTForImageClassification.from_pretrained("shadowlilac/aesthetic-shadow-v2")
+        self.model = ViTForImageClassification.from_pretrained("RE-N-Y/aesthetic-shadow-v2")
         self.resize = torchvision.transforms.Resize((1024, 1024), interpolation=2)
         self.normalize = torchvision.transforms.Normalize(mean=[0.65463551, 0.60715182, 0.61108185], std=[0.32903292, 0.32726001, 0.31909652])
 
