@@ -6,3 +6,4 @@ dist
 # everything under test/ except test.py
 test/*
 !test/test.py
+tmp*

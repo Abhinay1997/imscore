@@ -150,6 +150,7 @@ For full benchmark results and methodology, please refer to [bench.md](bench.md)
 | hps | 0.0010474 | 0.3733% |
 | laion | 0.0202606 | 0.3461% |
 | imreward | 0.0135808 | 0.7608% |
+| clip-t5-xxl | 0.0111 | 2.0091% |
 
 `imscore` library ports popular scorers such as PickScore, MPS, HPSv2, etc. In order to ensure that `.score` function is (1) fully differentiable and (2) takes pixels of range [0, 1], the image processing pipeline had to be modified. The above table reports the mean and standard error between the original and ported versions. 
 

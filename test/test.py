@@ -4,13 +4,13 @@ from imscore.mps.model import MPS
 from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScorer, CLIPScore
 from imscore.pickscore.model import PickScorer
 from imscore.imreward.model import ImageReward
-
+from imscore.vqascore.model import VQAScore
 import torch
 import numpy as np
 from PIL import Image
 from einops import rearrange
 from loguru import logger
-
+import traceback
 
 def factory(name:str):
     match name:
@@ -38,19 +38,21 @@ def factory(name:str):
             return CLIPScore("openai/clip-vit-large-patch14")
         case "ImageReward":
             return ImageReward.from_pretrained("RE-N-Y/ImageReward")
+        case "VQAScore":
+            return VQAScore.from_pretrained("RE-N-Y/clip-t5-xxl")
         case _:
             raise ValueError(f"model {name} not found")
         
-    
+
 def testrun(name:str):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = factory(name)
     model.eval()
     model.to(device=device)
 
-    prompts = "a photo of a cat"
+    prompts = "a maid"
 
-    good, bad = Image.open("cat.png"), Image.open("badcat.png")
+    good, bad = Image.open("maid.png"), Image.open("maid.png")
     good, bad = good.resize((512,512)), bad.resize((512,512))
     good, bad = np.array(good), np.array(bad)
     good = rearrange(torch.tensor(good), "h w c -> 1 c h w") / 255.0
@@ -72,6 +74,7 @@ def testrun(name:str):
 
 if __name__ == "__main__":
     names = [
+        "VQAScore",
         "ShadowAesthetic", 
         "CLIPAestheticScorer", 
         "SiglipAestheticScorer", 
@@ -82,10 +85,14 @@ if __name__ == "__main__":
         "CLIPPreferenceScorer", 
         "PickScorer",
         "CLIPScore",
-        "ImageReward"
+        "ImageReward",
     ]
 
     for name in names:
-        logger.info(f"Testing {name}")
-        score = testrun(name)
-        logger.info(f"Score: {score}")
+        try:
+            logger.info(f"Testing {name}")
+            score = testrun(name)
+            logger.info(f"Score: {score}")
+        except Exception as e:
+            logger.error(f"Error testing {name}: {e}")
+            logger.error(traceback.format_exc())
