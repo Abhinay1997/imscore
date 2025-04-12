@@ -160,12 +160,3 @@ Most ported models have a mean absolute error less than < 1% w.r.t original outp
 
 1. To save myself headaches.
 2. To provide a common interface for dataset filtering, posttraining, and image model benchmarking.
-
-## TODOs
-
-- [x] Benchmark scorers across ImageReward, PickAPicv2, MPS, and HPS datasets.
-- [x] Add discrepancy analysis between original and ported scorers.
-- [x] Add ImageReward scorers.
-- [ ] Add AIMv2 backbone scorers.
-- [ ] Add benchmarking code on HPD v2, ImageReward, and PickAPicv2 datasets.
-- [ ] Maybe add VQAScore as well.
