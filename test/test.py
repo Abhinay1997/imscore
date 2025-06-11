@@ -5,6 +5,7 @@ from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScore
 from imscore.pickscore.model import PickScorer
 from imscore.imreward.model import ImageReward
 from imscore.vqascore.model import VQAScore
+from imscore.cyclereward.model import CycleReward
 import torch
 import numpy as np
 from PIL import Image
@@ -40,6 +41,8 @@ def factory(name:str):
             return ImageReward.from_pretrained("RE-N-Y/ImageReward")
         case "VQAScore":
             return VQAScore.from_pretrained("RE-N-Y/clip-t5-xxl")
+        case "CycleReward":
+            return CycleReward.from_pretrained("NagaSaiAbhinay/CycleReward-Combo")
         case _:
             raise ValueError(f"model {name} not found")
         
@@ -86,6 +89,7 @@ if __name__ == "__main__":
         "PickScorer",
         "CLIPScore",
         "ImageReward",
+        "CycleReward",
     ]
 
     for name in names:
