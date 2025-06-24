@@ -28,6 +28,7 @@ from imscore.mps.model import MPS
 from imscore.preference.model import SiglipPreferenceScorer, CLIPScore
 from imscore.pickscore.model import PickScorer
 from imscore.imreward.model import ImageReward
+from imscore.cyclereward.model import CycleReward
 
 import torch
 import numpy as np
@@ -42,6 +43,7 @@ model = MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
 model = HPSv2.from_pretrained("RE-N-Y/hpsv21") # HPSv2.1 preference scorer
 model = ImageReward.from_pretrained("RE-N-Y/ImageReward") # ImageReward aesthetic scorer
 model = LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # LAION aesthetic scorer
+model = CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-Combo') # CycleReward preference scorer.
 
 # multimodal (pixels + text) preference scorers trained on PickaPicv2 dataset 
 model = SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
@@ -117,11 +119,16 @@ from imscore.mps.model import MPS
 from imscore.imreward.model import ImageReward
 from imscore.preference.model import SiglipPreferenceScorer, CLIPPreferenceScorer
 from imscore.pickscore.model import PickScorer
+from imscore.cyclereward.model import CycleReward
 
 HPSv2.from_pretrained("RE-N-Y/hpsv21") # HPSv2.1 preference scorer
 MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
 PickScorer("yuvalkirstain/PickScore_v1") # PickScore preference scorer
 ImageReward.from_pretrained("RE-N-Y/ImageReward") # ImageReward preference scorer
+CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-Combo') #CycleReward preference scorer trained on combined CyclePrefDB
+CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-T2I')#CycleReward preference scorer trained on CyclePrefDB-T2I only
+CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-I2T')
+#CycleReward preference scorer trained on CyclePrefDB-I2T only
 
 # multimodal scorers trained on PickAPicv2 dataset
 SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
