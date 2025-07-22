@@ -7,3 +7,4 @@ dist
 test/*
 !test/test.py
 tmp*
+.cache

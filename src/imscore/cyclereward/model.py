@@ -4,7 +4,7 @@ import torch.nn as nn
 import torchvision.transforms as T
 from torchvision.transforms import InterpolationMode
 from huggingface_hub import PyTorchModelHubMixin
-from ..imreward.model import BLIP
+from .blip import BLIP
 
 class MLP(nn.Module):
     def __init__(self, hiddens):

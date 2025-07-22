@@ -10,7 +10,6 @@ import torchvision.transforms.functional as TF
 from torchvision.transforms import InterpolationMode
 from open_clip import create_model_and_transforms, get_tokenizer
 from huggingface_hub import PyTorchModelHubMixin
-from pathlib import Path
 
 
 class ResizeMaxSize(nn.Module):

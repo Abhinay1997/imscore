@@ -8,7 +8,12 @@ from huggingface_hub import PyTorchModelHubMixin
 from ..utils import get_image_transform
 
 
-class ShadowAesthetic(nn.Module):
+class ShadowAesthetic(
+        nn.Module,
+        PyTorchModelHubMixin,
+        library_name="imscore",
+        repo_url="https://github.com/RE-N-Y/imscore"
+    ):
     def __init__(self):
         super().__init__()
         self.model = ViTForImageClassification.from_pretrained("RE-N-Y/aesthetic-shadow-v2")
