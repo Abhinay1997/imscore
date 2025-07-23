@@ -2,11 +2,17 @@ import torch
 import torch.nn as nn
 import torchvision
 from transformers import AutoProcessor, CLIPModel
+from huggingface_hub import PyTorchModelHubMixin
 
 # TODO: fix mismatch in processing output
 # score has an error of +-0.1
 
-class PickScorer(nn.Module):
+class PickScorer(
+    nn.Module,
+    PyTorchModelHubMixin,
+    library_name="imscore",
+    repo_url="https://github.com/RE-N-Y/imscore"
+):
     def __init__(self, model:str = "yuvalkirstain/PickScore_v1"):
         super().__init__()
         self.processor = AutoProcessor.from_pretrained("laion/CLIP-ViT-H-14-laion2B-s32B-b79K")

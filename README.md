@@ -39,8 +39,8 @@ from einops import rearrange
 
 # popular aesthetic/preference scorers
 model = ShadowAesthetic.from_pretrained("RE-N-Y/aesthetic-shadow-v2") # ShadowAesthetic aesthetic scorer (my favorite)
-model = CLIPScore("openai/clip-vit-large-patch14") # CLIPScore
-model = PickScorer("yuvalkirstain/PickScore_v1") # PickScore preference scorer
+model = CLIPScore.from_pretrained("RE-N-Y/clipscore-vit-large-patch14") # CLIPScore
+model = PickScorer.from_pretrained("RE-N-Y/pickscore") # PickScore preference scorer
 model = MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
 model = HPSv2.from_pretrained("RE-N-Y/hpsv21") # HPSv2.1 preference scorer
 model = ImageReward.from_pretrained("RE-N-Y/ImageReward") # ImageReward aesthetic scorer

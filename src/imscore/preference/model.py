@@ -70,7 +70,12 @@ class CLIPPreferenceScorer(
         return outputs.logits_per_image.diagonal()
     
 
-class CLIPScore(nn.Module):
+class CLIPScore(
+    nn.Module,
+    PyTorchModelHubMixin,
+    library_name="imscore",
+    repo_url="https://github.com/RE-N-Y/imscore"
+):
     def __init__(self, tag:str):
         super().__init__()
         self.model = AutoModel.from_pretrained(tag)
