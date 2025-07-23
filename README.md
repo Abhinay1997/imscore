@@ -129,10 +129,10 @@ HPSv2.from_pretrained("RE-N-Y/hpsv21") # HPSv2.1 preference scorer
 MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
 PickScorer("yuvalkirstain/PickScore_v1") # PickScore preference scorer
 ImageReward.from_pretrained("RE-N-Y/ImageReward") # ImageReward preference scorer
-CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-Combo') #CycleReward preference scorer trained on combined CyclePrefDB
-CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-T2I')#CycleReward preference scorer trained on CyclePrefDB-T2I only
+CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-Combo') # CycleReward preference scorer trained on combined CyclePrefDB
+CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-T2I')# CycleReward preference scorer trained on CyclePrefDB-T2I only
 CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-I2T')
-#CycleReward preference scorer trained on CyclePrefDB-I2T only
+# CycleReward preference scorer trained on CyclePrefDB-I2T only
 
 # multimodal scorers trained on PickAPicv2 dataset
 SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
