@@ -28,7 +28,9 @@ from imscore.mps.model import MPS
 from imscore.preference.model import SiglipPreferenceScorer, CLIPScore
 from imscore.pickscore.model import PickScorer
 from imscore.imreward.model import ImageReward
+from imscore.vqascore.model import VQAScore
 from imscore.cyclereward.model import CycleReward
+from imscore.evalmuse.model import EvalMuse
 
 import torch
 import numpy as np
@@ -36,7 +38,7 @@ from PIL import Image
 from einops import rearrange
 
 # popular aesthetic/preference scorers
-model = ShadowAesthetic() # ShadowAesthetic aesthetic scorer (my favorite)
+model = ShadowAesthetic.from_pretrained("RE-N-Y/aesthetic-shadow-v2") # ShadowAesthetic aesthetic scorer (my favorite)
 model = CLIPScore("openai/clip-vit-large-patch14") # CLIPScore
 model = PickScorer("yuvalkirstain/PickScore_v1") # PickScore preference scorer
 model = MPS.from_pretrained("RE-N-Y/mpsv1") # MPS (ovreall) preference scorer
@@ -44,6 +46,8 @@ model = HPSv2.from_pretrained("RE-N-Y/hpsv21") # HPSv2.1 preference scorer
 model = ImageReward.from_pretrained("RE-N-Y/ImageReward") # ImageReward aesthetic scorer
 model = LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # LAION aesthetic scorer
 model = CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-Combo') # CycleReward preference scorer.
+model = VQAScore.from_pretrained("RE-N-Y/clip-t5-xxl")
+model = EvalMuse.from_pretrained("RE-N-Y/evalmuse")
 
 # multimodal (pixels + text) preference scorers trained on PickaPicv2 dataset 
 model = SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
@@ -109,7 +113,7 @@ Dinov2AestheticScorer.from_pretrained("RE-N-Y/ava-rating-dinov2-sampled-False")
 
 # Common aesthetic scorers
 LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # LAION aesthetic scorer
-ShadowAesthetic() # ShadowAesthetic aesthetic scorer for anime images
+ShadowAesthetic.from_pretrained("RE-N-Y/aesthetic-shadow-v2") # ShadowAesthetic aesthetic scorer for anime images
 ```
 
 ### Preference Scorers
@@ -158,6 +162,7 @@ For full benchmark results and methodology, please refer to [bench.md](bench.md)
 | laion | 0.0202606 | 0.3461% |
 | imreward | 0.0135808 | 0.7608% |
 | clip-t5-xxl | 0.0111 | 2.0091% |
+| evalmuse | xxx | xxx |
 
 `imscore` library ports popular scorers such as PickScore, MPS, HPSv2, etc. In order to ensure that `.score` function is (1) fully differentiable and (2) takes pixels of range [0, 1], the image processing pipeline had to be modified. The above table reports the mean and standard error between the original and ported versions. 
 
