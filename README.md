@@ -49,7 +49,7 @@ model = LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # LAION a
 model = CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-Combo') # CycleReward preference scorer.
 model = VQAScore.from_pretrained("RE-N-Y/clip-t5-xxl")
 model = EvalMuse.from_pretrained("RE-N-Y/evalmuse")
-mode = HPSv3.from_pretrained("RE-N-Y/hpsv3")
+mode = HPSv3.from_pretrained("RE-N-Y/hpsv3") # NOTE: use with caution, expect 2~3% parity with original implementation. Requires a fix.
 
 # multimodal (pixels + text) preference scorers trained on PickaPicv2 dataset 
 model = SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
