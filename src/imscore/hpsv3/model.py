@@ -9,7 +9,7 @@ from .utils import process, INSTRUCTION
 
 
 class HPSv3(Qwen2VLForConditionalGeneration):
-    def __init__(self, config, special_token_ids=None):
+    def __init__(self, config):
         super().__init__(config)
         self.rm_head = nn.Sequential(
             nn.Linear(3584, 1024),
@@ -19,12 +19,12 @@ class HPSv3(Qwen2VLForConditionalGeneration):
             nn.ReLU(),
             nn.Linear(16,2)
         )
-        self.rm_head.to(torch.float32)
-        self.special_token_ids = special_token_ids
+        self.processor = AutoProcessor.from_pretrained('Qwen/Qwen2-VL-7B-Instruct', padding_side="right")
+        self.processor.tokenizer.add_special_tokens({"additional_special_tokens": ["<|Reward|>"]})
+        self.special_token_ids = self.processor.tokenizer.convert_tokens_to_ids(["<|Reward|>"])
         self.reward_token = "special"
-        self.rm_head.to(torch.float32)
+        self.config.tokenizer_padding_side = self.processor.tokenizer.padding_side
 
-        
 
     def forward(
         self,
@@ -46,9 +46,9 @@ class HPSv3(Qwen2VLForConditionalGeneration):
 
         outputs = self.model(input_ids=None, attention_mask=attention_mask, inputs_embeds=inputs_embeds, output_hidden_states=output_hidden_states)
 
-        hidden_states = outputs[0]  # [B, L, D]
-        with torch.autocast(device_type='cuda', dtype=torch.float32):
-            logits = self.rm_head(hidden_states)  # [B, L, N]
+        hiddens = outputs[0]  # [B, L, D]
+        with torch.autocast('cuda', dtype=torch.float32):
+            logits = self.rm_head(hiddens)  # [B, L, N]
 
         b, *_ = inputs_embeds.shape
         special_token_mask = torch.zeros_like(input_ids, dtype=torch.bool)
@@ -58,25 +58,7 @@ class HPSv3(Qwen2VLForConditionalGeneration):
         pooled = pooled.view(b, 1, -1)  # [B, 3, N] assert 3 attributes
         pooled = pooled.view(b, -1)
 
-
         return { "logits": pooled }
-
-class HPSv3Reward():
-    def __init__(self, device='cuda'):
-        processor = AutoProcessor.from_pretrained('Qwen/Qwen2-VL-7B-Instruct', padding_side="right")
-        special_tokens = ["<|Reward|>"]
-        processor.tokenizer.add_special_tokens({"additional_special_tokens": special_tokens})
-        special_token_ids = processor.tokenizer.convert_tokens_to_ids(special_tokens)
-        model = HPSv3.from_pretrained("RE-N-Y/hpsv3", special_token_ids=special_token_ids, torch_dtype=torch.bfloat16)
-        model.to(torch.bfloat16)
-        model.rm_head.to(torch.float32)
-        model.config.tokenizer_padding_side = processor.tokenizer.padding_side
-
-        self.device = device
-        self.use_special_tokens = True
-        self.model = model
-        self.processor = processor
-        self.model.to(self.device)
     
     def prepare(self, images, prompts):
         messages = []
@@ -102,10 +84,8 @@ class HPSv3Reward():
         )
         batch = { k : v.to(self.device) for k,v in batch.items() }
         return batch
-
+    
     def score(self, images, prompts):
-        
         batch = self.prepare(images, prompts)
-        rewards = self.model(**batch)["logits"]
-
+        rewards = self.forward(**batch)["logits"]
         return rewards
