@@ -22,7 +22,6 @@ class HPSv3(Qwen2VLForConditionalGeneration):
         self.processor.tokenizer.add_special_tokens({"additional_special_tokens": ["<|Reward|>"]})
         self.special_token_ids = self.processor.tokenizer.convert_tokens_to_ids(["<|Reward|>"])
         self.reward_token = "special"
-        self.config.tokenizer_padding_side = self.processor.tokenizer.padding_side
 
 
     def forward(
@@ -33,8 +32,7 @@ class HPSv3(Qwen2VLForConditionalGeneration):
         pixel_values: torch.Tensor | None = None,
         image_grid_thw: torch.LongTensor | None = None,
     ):
-        inputs_embeds = self.model.embed_tokens(input_ids)
-        pixel_values = pixel_values.type(self.visual.get_dtype())
+        inputs_embeds = self.language_model.embed_tokens(input_ids)
         image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
         image_mask = (input_ids == self.config.image_token_id).unsqueeze(-1).expand_as(inputs_embeds)
         image_embeds = image_embeds.to(inputs_embeds.device, inputs_embeds.dtype)
@@ -86,6 +84,6 @@ class HPSv3(Qwen2VLForConditionalGeneration):
     
     def score(self, images:list[Tensor], prompts:list[str]):
         batch = self.prepare(images, prompts)
-        rewards:Tensor = self.forward(**batch)["logits"]
+        rewards = self.forward(**batch)["logits"]
         mean, std = rewards.chunk(chunks=2, dim=-1)
-        return mean.squeeze(-1)
+        return mean
