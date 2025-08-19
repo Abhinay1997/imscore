@@ -31,6 +31,7 @@ from imscore.imreward.model import ImageReward
 from imscore.vqascore.model import VQAScore
 from imscore.cyclereward.model import CycleReward
 from imscore.evalmuse.model import EvalMuse
+from imscore.hpsv3.model import HPSv3
 
 import torch
 import numpy as np
@@ -48,11 +49,12 @@ model = LAIONAestheticScorer.from_pretrained("RE-N-Y/laion-aesthetic") # LAION a
 model = CycleReward.from_pretrained('NagaSaiAbhinay/CycleReward-Combo') # CycleReward preference scorer.
 model = VQAScore.from_pretrained("RE-N-Y/clip-t5-xxl")
 model = EvalMuse.from_pretrained("RE-N-Y/evalmuse")
+mode = HPSv3.from_pretrained("RE-N-Y/hpsv3")
 
 # multimodal (pixels + text) preference scorers trained on PickaPicv2 dataset 
 model = SiglipPreferenceScorer.from_pretrained("RE-N-Y/pickscore-siglip")
 
-prompts = "a photo of a cat"
+prompt = "a photo of a cat"
 pixels = Image.open("cat.jpg")
 pixels = np.array(pixels)
 pixels = rearrange(torch.tensor(pixels), "h w c -> 1 c h w") / 255.0
@@ -60,7 +62,7 @@ pixels = rearrange(torch.tensor(pixels), "h w c -> 1 c h w") / 255.0
 # prompts and pixels should have the same batch dimension
 # pixels should be in the range [0, 1]
 # score == logits
-score = model.score(pixels, prompts) # full differentiable reward
+score = model.score(pixels, [prompt]) # full differentiable reward
 ```
 
 ## Post Training for Generative Models
@@ -163,6 +165,7 @@ For full benchmark results and methodology, please refer to [bench.md](bench.md)
 | imreward | 0.0135808 | 0.7608% |
 | clip-t5-xxl | 0.0111 | 2.0091% |
 | evalmuse | xxx | xxx |
+| hpsv3 | xxx | xxx |
 
 `imscore` library ports popular scorers such as PickScore, MPS, HPSv2, etc. In order to ensure that `.score` function is (1) fully differentiable and (2) takes pixels of range [0, 1], the image processing pipeline had to be modified. The above table reports the mean and standard error between the original and ported versions. 
 

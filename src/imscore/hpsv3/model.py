@@ -2,8 +2,7 @@
 import torch
 import torch.nn as nn
 import torchvision.transforms as T
-import huggingface_hub
-from safetensors.torch import load_file
+from torch import Tensor
 from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 from .utils import process, INSTRUCTION
 
@@ -85,7 +84,8 @@ class HPSv3(Qwen2VLForConditionalGeneration):
         batch = { k : v.to(self.device) for k,v in batch.items() }
         return batch
     
-    def score(self, images, prompts):
+    def score(self, images:list[Tensor], prompts:list[str]):
         batch = self.prepare(images, prompts)
-        rewards = self.forward(**batch)["logits"]
-        return rewards
+        rewards:Tensor = self.forward(**batch)["logits"]
+        mean, std = rewards.chunk(chunks=2, dim=-1)
+        return mean.squeeze(-1)
